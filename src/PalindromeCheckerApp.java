@@ -1,91 +1,65 @@
+/**
+ * ==========================================================
+ * MAIN CLASS - UseCase9PalindromeCheckerApp
+ * ==========================================================
+ *
+ * Use Case 9: Recursive Palindrome Checker
+ *
+ * Description:
+ * This class validates a palindrome using recursion.
+ * Characters are compared from the outer positions
+ * moving inward using recursive calls.
+ *
+ * The recursion stops when:
+ * - All characters are matched, or
+ * - A mismatch is found.
+ *
+ * This use case demonstrates divide-and-conquer
+ * logic using method recursion.
+ *
+ * @author Developer
+ * @version 9.0
+ */
+
 public class PalindromeCheckerApp {
 
-    // Node class for singly linked list
-    static class Node {
-        char data;
-        Node next;
-
-        Node(char data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
-
+    /**
+     * Application entry point for UC9.
+     * @param args Command-line arguments
+     */
     public static void main(String[] args) {
 
         // Define input string
-        String input = "level";
+        String input = "madam";
 
-        // Convert string to linked list
-        Node head = null;
-        Node tail = null;
-
-        for (char c : input.toCharArray()) {
-            Node newNode = new Node(c);
-
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-
-        // Check palindrome
-        boolean isPalindrome = checkPalindrome(head);
+        // Call recursive method
+        boolean isPalindrome = checkString(input, 0, input.length() - 1);
 
         // Display result
         System.out.println("Input : " + input);
         System.out.println("Is Palindrome? : " + isPalindrome);
     }
 
-    // Method to check palindrome using linked list
-    public static boolean checkPalindrome(Node head) {
+    /**
+     * Recursively checks whether a string is palindrome.
+     * @param s The input string
+     * @param start Starting index
+     * @param end Ending index
+     * @return true if palindrome, false otherwise
+     */
+    private static boolean checkString(String s, int start, int end) {
 
-        if (head == null || head.next == null)
+        // Base condition: if start >= end, all characters matched
+        if (start >= end) {
             return true;
-
-        // Step 1: Find middle using fast & slow pointer
-        Node slow = head;
-        Node fast = head;
-
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
         }
 
-        // Step 2: Reverse second half
-        Node secondHalf = reverseList(slow);
-
-        // Step 3: Compare first and second half
-        Node firstHalf = head;
-        Node temp = secondHalf;
-
-        while (temp != null) {
-            if (firstHalf.data != temp.data)
-                return false;
-
-            firstHalf = firstHalf.next;
-            temp = temp.next;
+        // If mismatch found
+        if (s.charAt(start) != s.charAt(end)) {
+            return false;
         }
 
-        return true;
-    }
-
-    // Reverse linked list (in-place)
-    public static Node reverseList(Node head) {
-
-        Node prev = null;
-        Node current = head;
-
-        while (current != null) {
-            Node nextNode = current.next;
-            current.next = prev;
-            prev = current;
-            current = nextNode;
-        }
-
-        return prev;
+        // Recursive call for inner substring
+        return checkString(s, start + 1, end - 1);
     }
 }
